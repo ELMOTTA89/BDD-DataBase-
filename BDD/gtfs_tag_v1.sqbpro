@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="/home/fabrice.paka@Digital-Grenoble.local/Documents/gtfs_tag/gtfs_tag_v1" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="1766"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,5:mainstops"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="agency" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="68"/><column index="2" value="93"/><column index="3" value="75"/><column index="4" value="117"/><column index="5" value="85"/><column index="6" value="97"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="routes" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="68"/><column index="2" value="58"/><column index="3" value="122"/><column index="4" value="116"/><column index="5" value="74"/><column index="6" value="78"/><column index="7" value="109"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="stop_times" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="46"/><column index="2" value="50"/><column index="3" value="83"/><column index="4" value="105"/><column index="6" value="82"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="stops" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="50"/><column index="2" value="69"/><column index="3" value="75"/><column index="4" value="56"/><column index="5" value="59"/><column index="6" value="53"/><column index="7" value="91"/><column index="8" value="99"/><column index="9" value="140"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="trips" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="58"/><column index="2" value="46"/><column index="3" value="93"/><column index="4" value="68"/><column index="5" value="80"/><column index="6" value="61"/><column index="7" value="147"/><column index="8" value="95"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1">--DROP TABLE IF EXISTS agency;
+CREATE TABLE if not exists agency (
+        agency_id           TEXT NOT NULL,
+        agency_name         TEXT,
+        agency_url          INTEGER,
+        agency_timezone     TEXT,
+        agency_lang         TEXT,
+        agency_phone        INTEGER,
+        PRIMARY KEY(agency_id)
+);
+
+--drop TABLE if EXISTS routes;
+CREATE TABLE if not exists routes (
+        agency_id           TEXT,
+        route_id            TEXT NOT NULL,
+        route_short_name    TEXT,
+        route_long_name     TEXT,
+        route_type          TEXT,
+        route_color         TEXT,
+        route_text_color    TEXT,
+        --FOREIGN KEY(agency_id) REFERENCES agency(agency_id),
+        PRIMARY KEY(route_id)
+);
+
+-- drop table if EXISTS trips;
+CREATE TABLE if not exists trips (
+        route_id                TEXT,
+        trip_id                 INTEGER NOT NULL,
+        trip_headsign           TEXT,
+        service_id              TEXT,
+        direction_id            INTEGER,
+        shape_id                TEXT,
+        wheelchair_accessible   INTEGER,
+        bikes_allowed           INTEGER,
+        --FOREIGN KEY(route_id) REFERENCES routes(route_id),
+        PRIMARY KEY(trip_id)
+);
+
+-- drop table if EXISTS stop_times;
+CREATE TABLE if not exists stop_times (
+        trip_id             INTEGER NOT NULL,
+        stop_id             INTEGER,
+        arrival_time        TEXT,
+        departure_time      TEXT,
+        stop_sequence       INTEGER,
+        pickup_type         INTEGER,
+        --FOREIGN KEY(trip_id) REFERENCES trips(trip_id),
+        --FOREIGN KEY(stop_id) REFERENCES stops(stop_id),
+        PRIMARY KEY(stop_id, stop_sequence)
+);
+
+--drop table if EXISTS stops;
+CREATE TABLE if not exists stops (
+        stop_id             TEXT NOT NULL,
+        stop_code           TEXT,
+        stop_name           TEXT,
+        stop_lat            NUMERIC,
+        stop_lon            NUMERIC,
+        zone_id             INTEGER,
+        location_type       INTEGER,
+        parent_station      TEXT,
+        wheelchair_boarding INTEGER,
+        PRIMARY KEY(stop_id)
+		--FOREIGN key(parent_station) REFERENCES stops(stop_id)
+);</sql><current_tab id="0"/></tab_sql></sqlb_project>
